@@ -1,0 +1,22 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: "Install"
+        run: yarn # install all the dependencies for the whole project
+
+      - name: "Build"
+        run: yarn build # this builds all the packages and apps at the same time

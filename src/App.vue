@@ -132,7 +132,7 @@ import routes from "./routes/router";
 const device = getDevice();
 // Framework7 Parameters
 const f7params = {
-  name: "F7-Vue Typescript", // App name
+  name: "Dollar Daddy", // App name
   theme: "auto", // Automatic theme detection
   id: "com.example.app", // App bundle ID
   // App routes
