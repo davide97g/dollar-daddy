@@ -141,8 +141,6 @@ import {
 } from "framework7-vue";
 import Navbar from "../components/Navbar.vue";
 import { useCounterStore } from "../stores/counter";
-import { firebaseApp } from "../config/firebase";
-const counter = useCounterStore();
 
-console.info(firebaseApp);
+const counter = useCounterStore();
 </script>

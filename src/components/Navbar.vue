@@ -26,7 +26,7 @@
         </f7-link>
         <div class="flex items-center border-l-3 border-white">
           <f7-link
-            href="https://github.com/sajjadalis/dollar-daddy"
+            href="https://github.com/davide97g/dollar-daddy"
             target="_blank"
             class="min-w-a px-1"
             external
