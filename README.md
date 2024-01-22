@@ -2,18 +2,18 @@
 
 This is a starter template for Framework7 created via Vite Cli.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/sajjadalis/f7-vue-typescript/blob/master/LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://github.com/sajjadalis/dollar-daddy/blob/master/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-purple.svg)](http://makeapullrequest.com)
 [![Framework7](https://img.shields.io/badge/Framework7-333333?logo=framework7)](https://framework7.io/)
 [![Capacitorjs](https://img.shields.io/badge/Capacitor-333333?logo=capacitor)](https://capacitorjs.com/)
 [![Vue3](https://img.shields.io/badge/Vue-333333?logo=vue.js)](https://vuejs.org/)
-[![Play on StackBlitz](https://img.shields.io/badge/Play%20on-Stackblitz-1B8CFD?logo=stackblitz)](https://stackblitz.com/github/sajjadalis/f7-vue-typescript)
+[![Play on StackBlitz](https://img.shields.io/badge/Play%20on-Stackblitz-1B8CFD?logo=stackblitz)](https://stackblitz.com/github/sajjadalis/dollar-daddy)
 
 The project structure diverges somewhat from the conventional Framework7 CLI setup, aligning itself with the standard Vue 3 structure. It's using pages from the Framework7 Tabbed layout, which acts as the default view for this starter template. Upon building, the compiled files can be found in the main `dist` directory. Furthermore, the `index.html` file resides in the root directory of the project.
 
-[👊 Check out the live demo](https://f7-vue-typescript.vercel.app/). It looks even better in the mobile view of your browser.
+[👊 Check out the live demo](https://dollar-daddy.vercel.app/). It looks even better in the mobile view of your browser.
 
-[⚡️ Play on StackBlitz](https://stackblitz.com/github/sajjadalis/f7-vue-typescript)
+[⚡️ Play on StackBlitz](https://stackblitz.com/github/sajjadalis/dollar-daddy)
 
 ## Features
 
@@ -76,15 +76,15 @@ The language switcher drop-down select can be found in the `./src/pages/home.vue
 
 ### GitHub Template
 
-[Create a repo from this template on GitHub](https://github.com/sajjadalis/f7-vue-typescript/generate).
+[Create a repo from this template on GitHub](https://github.com/sajjadalis/dollar-daddy/generate).
 
 ### Clone to local
 
 If you prefer to do it manually with the cleaner git history
 
 ```sh
-npx degit sajjadalis/f7-vue-typescript f7-vue-typescript
-cd f7-vue-typescript
+npx degit sajjadalis/dollar-daddy dollar-daddy
+cd dollar-daddy
 npm install
 ```
 
@@ -96,7 +96,7 @@ When you use this template, try follow the checklist to update your info properl
 - [ ] Change the `appId` and `appName` in `capacitor.config.json`
 - [ ] Change the `name` and `id` for f7params in `App.vue`
 
-The easiest way is to use Search (Ctrl+Shift+F) feature in VS Code. Search for `com.example.app` and replace with `com.yourdomain.app`. Similarly search for `F7-Vue Typescript` and replace with `Your App Name`.
+The easiest way is to use Search (Ctrl+Shift+F) feature in VS Code. Search for `com.example.app` and replace with `com.yourdomain.app`. Similarly search for `Dollar Daddy` and replace with `Your App Name`.
 
 And, enjoy :)
 

@@ -10,8 +10,8 @@
       class="flex items-center uppercase tracking-wider text-color-primary"
       text="lg"
       font="bold title"
-      ><i class="i-simple-icons-framework7 w-5 h-5 mr-1"></i> F7-Vue
-      TypeScript</f7-nav-title
+      ><i class="i-simple-icons-framework7 w-5 h-5 mr-1"></i
+      >{{ env }}</f7-nav-title
     >
     <f7-nav-right>
       <div class="flex items-center">
@@ -26,7 +26,7 @@
         </f7-link>
         <div class="flex items-center border-l-3 border-white">
           <f7-link
-            href="https://github.com/sajjadalis/f7-vue-typescript"
+            href="https://github.com/sajjadalis/dollar-daddy"
             target="_blank"
             class="min-w-a px-1"
             external
@@ -69,6 +69,7 @@ import {
   f7Button,
 } from "framework7-vue";
 
+const env = import.meta.env.VITE_ENV;
 // COLOR THEMES
 const colors: string[] = Object.keys(f7.colors).filter(
   (c) => c !== "primary" && c !== "white" && c !== "black"

@@ -2,7 +2,7 @@ import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
   appId: "com.example.app",
-  appName: "f7-vue-typescript",
+  appName: "dollar-daddy",
   webDir: "dist",
 };
 
