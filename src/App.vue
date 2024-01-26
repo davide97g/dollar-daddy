@@ -1,5 +1,6 @@
 <template>
   <f7-app v-bind="f7params">
+    <router-view />
     <!-- Left panel with cover effect-->
     <f7-panel left cover dark>
       <f7-view>
@@ -21,37 +22,8 @@
     </f7-panel>
 
     <!-- Views/Tabs container -->
-    <f7-views tabs class="safe-areas">
-      <!-- Tabbar for switching views-tabs -->
-      <f7-toolbar tabbar labels bottom>
-        <f7-link tab-link="#view-home" tab-link-active>
-          <i class="i-tabler-home w-6 h-6" />
-          <span class="normal-case text-sm">Home</span>
-        </f7-link>
-        <f7-link tab-link="#view-about">
-          <i class="i-tabler-user w-6 h-6" />
-          <span class="normal-case text-sm">About</span>
-        </f7-link>
-        <f7-link tab-link="#view-settings">
-          <i class="i-tabler-settings w-6 h-6" />
-          <span class="normal-case text-sm">Settings</span>
-        </f7-link>
-      </f7-toolbar>
 
-      <!-- Your main view/tab, should have "view-main" class. It also has "tab-active" class -->
-      <f7-view id="view-home" main tab tab-active url="/"></f7-view>
-
-      <!-- About View -->
-      <f7-view id="view-about" name="about" tab url="/about/"></f7-view>
-
-      <!-- Settings View -->
-      <f7-view
-        id="view-settings"
-        name="settings"
-        tab
-        url="/settings/"
-      ></f7-view>
-    </f7-views>
+    <Toolbar />
 
     <!-- Popup -->
     <f7-popup id="my-popup">
@@ -104,6 +76,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import Toolbar from "./components/Toolbar.vue";
 import {
   f7,
   f7ready,
@@ -127,7 +100,6 @@ import {
 } from "framework7-vue";
 import { getDevice } from "framework7/lite-bundle";
 import capacitorApp from "./capacitor-app";
-import routes from "./routes/router";
 
 const device = getDevice();
 // Framework7 Parameters
@@ -136,7 +108,7 @@ const f7params = {
   theme: "auto", // Automatic theme detection
   id: "com.example.app", // App bundle ID
   // App routes
-  routes: routes,
+  routes: [],
 
   // Input settings
   input: {

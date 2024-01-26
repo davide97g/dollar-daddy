@@ -1,25 +1,25 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 import i18n from "./locale";
 import Framework7 from "framework7/lite-bundle";
-import Framework7Vue, { registerComponents } from 'framework7-vue/bundle';
-import App from './App.vue'
-
+import Framework7Vue, { registerComponents } from "framework7-vue/bundle";
+import App from "./App.vue";
 
 import "framework7/css/bundle";
-import 'uno.css'
-import './app.css';
+import "uno.css";
+import "./app.css";
+import { Auth } from "./api/auth";
+import { router } from "./router";
 
-// Init Framework7-Vue Plugin
-Framework7.use(Framework7Vue);
+const app = createApp(App);
 
-const app = createApp(App)
+const pinia = createPinia();
 
-// Register All Framework7 Vue components
-// registerComponents(app);
+app.use(pinia);
 
-app.use(createPinia())
-
-app.use(i18n)
-
-app.mount('#app')
+Auth.onAuthChange()
+  .catch((err) => console.info(err))
+  .finally(() => {
+    Framework7.use(Framework7Vue);
+    app.use(router).use(i18n).mount("#app");
+  });
