@@ -10,12 +10,7 @@ export const routes: readonly RouteRecordRaw[] = [
   {
     path: "/",
     name: ROUTE_NAMES.homepage,
-    component: () => import("../pages/home.vue"),
-  },
-  {
-    path: "/login",
-    name: ROUTE_NAMES.login,
-    component: () => import("../pages/login.vue"),
+    component: () => import("../pages/Home.vue"),
   },
   {
     path: "/:pathMatch(.*)*",

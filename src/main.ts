@@ -18,7 +18,7 @@ const pinia = createPinia();
 app.use(pinia);
 
 Auth.onAuthChange()
-  .catch((err) => console.info(err))
+  .catch()
   .finally(() => {
     Framework7.use(Framework7Vue);
     app.use(router).use(i18n).mount("#app");

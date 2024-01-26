@@ -10,8 +10,8 @@ const router = createRouter({
 
 // ? logged guard
 router.beforeEach(async (to, _, next) => {
-  if (to.name !== ROUTE_NAMES.login && !useUserStore().user) {
-    next({ name: ROUTE_NAMES.login });
+  if (to.name !== ROUTE_NAMES.homepage && !useUserStore().user) {
+    next({ name: ROUTE_NAMES.homepage });
   } else next();
 });
 
