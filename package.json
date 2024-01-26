@@ -2,7 +2,7 @@
   "name": "dollar-daddy",
   "version": "0.0.4",
   "scripts": {
-    "dev": "vite --port 3000",
+    "dev": "vite --port 8080 --open",
     "build": "run-p lint build-only",
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
@@ -23,7 +23,8 @@
     "framework7-vue": "^8.3.0",
     "pinia": "^2.1.7",
     "vue": "^3.3.7",
-    "vue-i18n": "^9.6.2"
+    "vue-i18n": "^9.6.2",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@capacitor/cli": "^5.5.1",
