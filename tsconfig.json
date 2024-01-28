@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "allowJs": true,
     "module": "ESNext",
-    "moduleResolution": "Bundler"
+    "moduleResolution": "Bundler",
+    "verbatimModuleSyntax": false
   },
 
   "references": [

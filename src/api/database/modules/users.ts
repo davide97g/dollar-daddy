@@ -1,7 +1,15 @@
+import type { DD_Category } from "src/models/categories";
 import { DB } from "../../../config/firebase";
 import type { DD_User } from "../../../models/user";
 import { setLoading } from "../../../services/utils";
-import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 
 const COLLECTION = "users";
 export const Users = {
@@ -11,6 +19,13 @@ export const Users = {
       setLoading(false)
     );
     return snap.exists() ? (snap.data() as DD_User) : undefined;
+  },
+  getUserCategories: async (id: string) => {
+    setLoading(true);
+    const snaps = await getDocs(
+      collection(DB, COLLECTION, id, "categories")
+    ).finally(() => setLoading(false));
+    return snaps.docs.map((snap) => snap.data() as DD_Category);
   },
   create: async (user: DD_User): Promise<DD_User | null> => {
     try {
