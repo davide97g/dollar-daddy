@@ -11,6 +11,7 @@ export interface DD_Category {
     monthly?: number;
     yearly?: number;
   };
-  excluded?: boolean;
-  childrenCategoryIdList?: string; // children here (MAYBE NOT USEFUL)
+  excludedFromStats?: boolean;
+  parentCategoryId?: string;
+  deleted?: boolean;
 }

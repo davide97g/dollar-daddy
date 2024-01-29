@@ -3,14 +3,10 @@ import { AUTH } from "../config/firebase";
 import {
   signOut,
   onAuthStateChanged,
-  GoogleAuthProvider,
-  signInWithPopup,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { API } from "../api";
 import type { DD_User } from "../models/user";
-
-const googleProvider = new GoogleAuthProvider();
 
 export const Auth = {
   onAuthChange: async () =>
@@ -24,7 +20,7 @@ export const Auth = {
           } else {
             const newUser: DD_User = {
               id: firebaseUser.uid,
-              displayName: firebaseUser.displayName || "",
+              displayName: firebaseUser.displayName || firebaseUser.email || "",
               email: firebaseUser.email || "",
             };
             const createdUser = await API.Database.Users.create(newUser);

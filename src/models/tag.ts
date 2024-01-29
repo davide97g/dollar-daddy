@@ -7,5 +7,8 @@ export interface DD_Tag {
   shortName: string;
   color: string;
 
+  holiday?: boolean;
+
   excluded?: boolean;
+  deleted?: boolean;
 }

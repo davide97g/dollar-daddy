@@ -1,7 +1,7 @@
 export type WEEK_DAY =
   | "MONDAY"
   | "TUESDAY"
-  | "WEDNSDAY"
+  | "WEDNESDAY"
   | "THURSDAY"
   | "FRIDAY"
   | "SATURDAY"

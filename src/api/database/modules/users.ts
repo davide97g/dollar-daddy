@@ -10,6 +10,9 @@ import {
   getDocs,
   setDoc,
 } from "firebase/firestore";
+import { DD_Tag } from "src/models/tag";
+import { DD_Transaction } from "src/models/transaction";
+import { DD_Stats } from "src/models/stats";
 
 const COLLECTION = "users";
 export const Users = {
@@ -26,6 +29,34 @@ export const Users = {
       collection(DB, COLLECTION, id, "categories")
     ).finally(() => setLoading(false));
     return snaps.docs.map((snap) => snap.data() as DD_Category);
+  },
+  getUserTags: async (id: string) => {
+    setLoading(true);
+    const snaps = await getDocs(collection(DB, COLLECTION, id, "tags")).finally(
+      () => setLoading(false)
+    );
+    return snaps.docs.map((snap) => snap.data() as DD_Tag);
+  },
+  getUserTransactions: async (id: string) => {
+    setLoading(true);
+    const snaps = await getDocs(
+      collection(DB, COLLECTION, id, "transactions")
+    ).finally(() => setLoading(false));
+    return snaps.docs.map((snap) => snap.data() as DD_Transaction);
+  },
+  getUserRecurrencies: async (id: string) => {
+    setLoading(true);
+    const snaps = await getDocs(
+      collection(DB, COLLECTION, id, "recurrencies")
+    ).finally(() => setLoading(false));
+    return snaps.docs.map((snap) => snap.data() as DD_Transaction);
+  },
+  getUserStats: async (id: string) => {
+    setLoading(true);
+    const snaps = await getDocs(
+      collection(DB, COLLECTION, id, "stats")
+    ).finally(() => setLoading(false));
+    return snaps.docs.map((snap) => snap.data() as DD_Stats);
   },
   create: async (user: DD_User): Promise<DD_User | null> => {
     try {
