@@ -1,6 +1,6 @@
 {
   "name": "dollar-daddy",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
     "dev": "vite --port 8080 --open",
     "build": "run-p lint build-only",

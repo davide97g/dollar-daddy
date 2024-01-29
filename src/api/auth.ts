@@ -5,6 +5,7 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { API } from "../api";
 import type { DD_User } from "../models/user";
@@ -36,11 +37,9 @@ export const Auth = {
         }
       });
     }),
-  login: async () => {
-    signInWithPopup(AUTH, googleProvider)
-      .then(async (result) => {
-        console.info(result);
-      })
+  login: async (email: string, password: string) => {
+    signInWithEmailAndPassword(AUTH, email, password)
+      .then(async ({ user }) => console.info(user))
       .catch((error) => console.error(error));
   },
   logout: async () =>

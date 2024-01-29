@@ -18,7 +18,7 @@ export const Users = {
     const snap = await getDoc(doc(DB, COLLECTION, id)).finally(() =>
       setLoading(false)
     );
-    return snap.exists() ? (snap.data() as DD_User) : undefined;
+    return snap.exists() ? (snap.data() as DD_User) : null;
   },
   getUserCategories: async (id: string) => {
     setLoading(true);
