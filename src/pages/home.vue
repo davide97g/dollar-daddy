@@ -1,7 +1,6 @@
 <template>
   <f7-page name="home">
-    <f7-navbar :title="`Dollar Daddy${env !== 'PROD' ? ` [${env}]` : ''}`" />
-
+    <Navbar />
     <f7-block-title v-if="userStore.user">{{
       userStore.user?.displayName
     }}</f7-block-title>
@@ -13,6 +12,7 @@
       class="grid grid-cols-3 grid-gap justify-center"
     >
       <f7-button tonal @click="Auth.logout">Logout</f7-button>
+      <f7-button @click="goToOverview">Go to Overview</f7-button>
     </f7-block>
     <f7-block-title>Categories</f7-block-title>
     <f7-block v-if="categories">
@@ -25,20 +25,20 @@ import { ref } from "vue";
 import { API } from "../api";
 import { Auth } from "../api/auth";
 import { useUserStore } from "../stores/user";
-import {
-  f7Page,
-  f7Navbar,
-  f7Button,
-  f7BlockTitle,
-  f7Block,
-} from "framework7-vue";
+import Navbar from "../components/Navbar.vue";
+import { f7Page, f7Button, f7BlockTitle, f7Block } from "framework7-vue";
 import { DD_Category } from "../models/categories";
+import { useRouter } from "vue-router";
 const env = import.meta.env.VITE_ENV;
 const userStore = useUserStore();
 const categories = ref<DD_Category[]>([]);
+const router = useRouter();
 if (userStore.user?.id) {
   API.Database.Users.getUserCategories(userStore.user?.id).then(
     (res) => (categories.value = res)
   );
 }
+const goToOverview = () => {
+  router.push("/overview");
+};
 </script>

@@ -10,8 +10,8 @@
       class="flex items-center uppercase tracking-wider text-color-primary"
       text="lg"
       font="bold title"
-      ><i class="i-simple-icons-framework7 w-5 h-5 mr-1"></i
-      >{{ env }}</f7-nav-title
+      ><i class="i-simple-icons-framework7 w-5 h-5 mr-1"></i>Dollar Daddy -
+      {{ env }}</f7-nav-title
     >
     <f7-nav-right>
       <div class="flex items-center">
