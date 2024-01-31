@@ -1,5 +1,6 @@
 <template>
   <f7-app v-bind="f7params">
+    <Navbar />
     <router-view />
     <!-- Left panel with cover effect-->
     <f7-panel left cover dark>
@@ -39,6 +40,7 @@ import {
 import { getDevice } from "framework7/lite-bundle";
 import capacitorApp from "./capacitor-app";
 import LoginScreen from "./components/LoginScreen.vue";
+import Navbar from "./components/Navbar.vue";
 
 const device = getDevice();
 // Framework7 Parameters

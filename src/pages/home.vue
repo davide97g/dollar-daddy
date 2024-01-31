@@ -1,6 +1,5 @@
 <template>
   <f7-page name="home">
-    <Navbar />
     <f7-block-title v-if="userStore.user">{{
       userStore.user?.displayName
     }}</f7-block-title>
@@ -25,11 +24,11 @@ import { ref } from "vue";
 import { API } from "../api";
 import { Auth } from "../api/auth";
 import { useUserStore } from "../stores/user";
-import Navbar from "../components/Navbar.vue";
 import { f7Page, f7Button, f7BlockTitle, f7Block } from "framework7-vue";
 import { DD_Category } from "../models/categories";
 import { useRouter } from "vue-router";
-const env = import.meta.env.VITE_ENV;
+import { ROUTE_NAMES } from "../router/routes";
+
 const userStore = useUserStore();
 const categories = ref<DD_Category[]>([]);
 const router = useRouter();
@@ -39,6 +38,6 @@ if (userStore.user?.id) {
   );
 }
 const goToOverview = () => {
-  router.push("/overview");
+  router.push({ name: ROUTE_NAMES.overview });
 };
 </script>

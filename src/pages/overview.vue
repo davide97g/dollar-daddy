@@ -1,7 +1,5 @@
 <template>
   <f7-page>
-    <Navbar />
-
     <f7-card
       title="Balance"
       content="Card with header and footer. Card headers are used to display card titles and footers for additional information or just for custom actions."
@@ -15,109 +13,46 @@
       footer="Card footer"
       :raised="true"
     ></f7-card>
-    <f7-block-title>Expenses</f7-block-title>
-    <f7Card
-      :raised="true"
-      v-for="(item, index) in transactions"
-      :key="index"
-      @click="handleCardClick(item.id)"
-    >
-      <f7List strong inset-md inset-ios dividers-ios media-list>
-        <f7-list-item
-          swipeout
-          :title="item.description"
-          :subtitle="item.amount.toFixed(2) + ' €'"
-          :text="'ID = ' + item.id"
-        >
-          <template #media>
-            <img
-              style="border-radius: 17px"
-              src="https://cdn.framework7.io/placeholder/fashion-88x88-3.jpg"
-              width="44"
-            />
-          </template>
-          <f7-swipeout-actions right>
-            <f7-swipeout-button
-              delete
-              confirm-text="Are you sure you want to delete this item?"
-              >Delete</f7-swipeout-button
-            >
-          </f7-swipeout-actions>
-        </f7-list-item>
-      </f7List>
-    </f7Card>
 
-    <f7-sheet
-      v-model:opened="showTransaction"
-      @on-sheet:closed="showTransaction = false"
-      style="height: auto"
-      swipe-to-close
-      swipe-to-step
-      push
-      backdrop
-    >
-      <f7-toolbar>
-        <div slot="before-inner">
-          {{
-            tempTransaction.day +
-            "/" +
-            tempTransaction.month +
-            1 +
-            "/" +
-            tempTransaction.year
-          }}
-        </div>
-        <div slot="after-inner">
-          <f7-link sheet-close>Close</f7-link>
-        </div>
-      </f7-toolbar>
-      <div class="sheet-modal-swipe-step">
-        <div class="padding-horizontal padding-bottom">
-          <div class="margin-top text-align-center" style="font-size: 18px">
-            <b>Da decidere come fare</b>
-          </div>
-        </div>
-        <div
-          class="display-flex padding justify-content-space-between align-items-center"
-        >
-          <div style="font-size: 18px">
-            <b>{{ tempTransaction.id }}</b>
-          </div>
-          <div style="font-size: 22px">
-            <b>{{ tempTransaction.amount.toFixed(2) + " €" }}</b>
-          </div>
-        </div>
-        <div class="padding-horizontal padding-bottom">
-          <div class="margin-top text-align-center">
-            Swipe up for more details
-          </div>
-        </div>
-      </div>
-      <f7-block-title class="margin-top">More details:</f7-block-title>
-      <f7-list>
-        <f7-list-item title="userId">
-          <template #after>
-            <b>{{ tempTransaction.userId }}</b>
-          </template>
-        </f7-list-item>
-        <f7-list-item title="timestamp">
-          <template #after>
-            <b>{{ tempTransaction.timestamp }}</b>
-          </template>
-        </f7-list-item>
-        <f7-list-item title="categoryId">
-          <template #after>
-            <b>{{ tempTransaction.categoryId }}</b>
-          </template>
-        </f7-list-item>
-        <f7-list-item title="description">
-          <template #after>
-            <b>{{ tempTransaction.description }}</b>
-          </template>
-        </f7-list-item>
-      </f7-list>
-      <f7-button large fill>Edit</f7-button>
-    </f7-sheet>
+    <f7-block-title>Expenses</f7-block-title>
+
+    <f7List inset-md inset-ios dividers-ios media-list class="my-list">
+      <f7-list-item
+        swipeout
+        :title="item.description"
+        :subtitle="item.amount.toFixed(2) + ' €'"
+        :text="'ID = ' + item.id"
+        v-for="(item, index) in transactions"
+        :key="index"
+        @click="handleCardClick(item.id)"
+        :style="{
+          background: '#FDF2F2FF',
+          borderRadius: '1rem',
+          boxShadow: '0px 2px 5px rgb(23 26 31 / 39%)',
+        }"
+      >
+        <template #media>
+          <img
+            style="border-radius: 17px"
+            src="https://cdn.framework7.io/placeholder/fashion-88x88-3.jpg"
+            width="44"
+          />
+        </template>
+        <f7-swipeout-actions right>
+          <f7-swipeout-button
+            delete
+            confirm-text="Are you sure you want to delete this item?"
+            @click="(e:Event)=>e.stopPropagation()"
+            >Delete</f7-swipeout-button
+          >
+        </f7-swipeout-actions>
+      </f7-list-item>
+    </f7List>
+
+    <TransactionDetail
+      :transaction="transactions.find((t) => t.id === selectedTransactionId)"
+      @close="() => (selectedTransactionId = undefined)"
+    />
   </f7-page>
 </template>
 
@@ -130,30 +65,15 @@ import {
   f7ListItem,
   f7SwipeoutActions,
   f7SwipeoutButton,
-  f7Button,
-  f7Toolbar,
-  f7Link,
-  f7Sheet,
 } from "framework7-vue";
 import { DD_Transaction } from "../models/transaction";
 
 import { ref } from "vue";
-import Navbar from "../components/Navbar.vue";
 import { onMounted } from "vue";
+import TransactionDetail from "../components/TransactionDetail.vue";
 
-const transactions = ref<DD_Transaction[]>([]); //ha un tipo?
-const showTransaction = ref(false); //ha un tipo?
-const tempTransaction = ref<DD_Transaction>({
-  id: "",
-  userId: "",
-  timestamp: 0,
-  year: 0,
-  month: 0,
-  day: 0,
-  categoryId: "",
-  amount: 0,
-  description: "",
-});
+const transactions = ref<DD_Transaction[]>([]);
+const selectedTransactionId = ref<string>();
 
 onMounted(() => {
   transactions.value = generateRandomTransactions();
@@ -188,16 +108,16 @@ function generateRandomTransactions(): DD_Transaction[] {
 }
 
 const handleCardClick = (id: string) => {
-  const transaction = transactions.value.find((t) => t.id === id);
-  if (transaction) {
-    tempTransaction.value = transaction;
-    showTransaction.value = true;
-    console.log(tempTransaction.value);
-  } else {
-    console.error("Transaction not found");
-    showTransaction.value = false;
-  }
+  selectedTransactionId.value = id;
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.my-list {
+  ul {
+    gap: 1rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+</style>
