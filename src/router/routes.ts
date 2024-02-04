@@ -5,6 +5,7 @@ export const ROUTE_NAMES = {
   login: "Login",
   notFound: "Not Found",
   overview: "Overview",
+  add: "Add",
 };
 
 export const routes: readonly RouteRecordRaw[] = [
@@ -17,6 +18,11 @@ export const routes: readonly RouteRecordRaw[] = [
     path: "/overview",
     name: ROUTE_NAMES.overview,
     component: () => import("../pages/overview.vue"),
+  },
+  {
+    path: "/add",
+    name: ROUTE_NAMES.add,
+    component: () => import("../pages/add.vue"),
   },
   {
     path: "/:pathMatch(.*)*",
