@@ -53,6 +53,13 @@
       :transaction="transactions.find((t) => t.id === selectedTransactionId)"
       @close="() => (selectedTransactionId = undefined)"
     />
+
+    <f7-fab
+      position="left-bottom"
+      @click="transactions.push(generateRandomTransaction())"
+    >
+      <i class="i-mdi-robot-angry w-8 h-8 text-color-primary"></i>
+    </f7-fab>
   </f7-page>
 </template>
 
@@ -65,6 +72,7 @@ import {
   f7ListItem,
   f7SwipeoutActions,
   f7SwipeoutButton,
+  f7Fab,
 } from "framework7-vue";
 import { DD_Transaction } from "../models/transaction";
 
@@ -101,7 +109,7 @@ function generateRandomTransaction(): DD_Transaction {
 
 function generateRandomTransactions(): DD_Transaction[] {
   const transactions: DD_Transaction[] = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 2; i++) {
     transactions.push(generateRandomTransaction());
   }
   return transactions;
