@@ -60,6 +60,10 @@
     >
       <i class="i-mdi-robot-angry w-8 h-8 text-color-primary"></i>
     </f7-fab>
+
+    <f7-fab position="right-bottom" @click="goToAdd">
+      <i class="i-mdi-plus-thick w-8 h-8 text-color-primary"></i>
+    </f7-fab>
   </f7-page>
 </template>
 
@@ -79,6 +83,11 @@ import { DD_Transaction } from "../models/transaction";
 import { ref } from "vue";
 import { onMounted } from "vue";
 import TransactionDetail from "../components/TransactionDetail.vue";
+
+import { useRouter } from "vue-router";
+import { ROUTE_NAMES } from "../router/routes";
+
+const router = useRouter();
 
 const transactions = ref<DD_Transaction[]>([]);
 const selectedTransactionId = ref<string>();
@@ -117,6 +126,10 @@ function generateRandomTransactions(): DD_Transaction[] {
 
 const handleCardClick = (id: string) => {
   selectedTransactionId.value = id;
+};
+
+const goToAdd = () => {
+  router.push({ name: ROUTE_NAMES.add });
 };
 </script>
 
