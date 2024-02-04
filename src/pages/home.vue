@@ -11,7 +11,8 @@
       class="grid grid-cols-3 grid-gap justify-center"
     >
       <f7-button tonal @click="Auth.logout">Logout</f7-button>
-      <f7-button @click="goToOverview">Go to Overview</f7-button>
+      <f7-button tonal @click="goToOverview">Overview</f7-button>
+      <f7-button tonal @click="goToAdd">Add</f7-button>
     </f7-block>
     <f7-block-title>Categories</f7-block-title>
     <f7-block v-if="categories">
@@ -39,5 +40,9 @@ if (userStore.user?.id) {
 }
 const goToOverview = () => {
   router.push({ name: ROUTE_NAMES.overview });
+};
+
+const goToAdd = () => {
+  router.push({ name: ROUTE_NAMES.add });
 };
 </script>
