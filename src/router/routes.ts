@@ -6,6 +6,7 @@ export const ROUTE_NAMES = {
   notFound: "Not Found",
   overview: "Overview",
   add: "Add",
+  category: "Category",
 };
 
 export const routes: readonly RouteRecordRaw[] = [
@@ -23,6 +24,11 @@ export const routes: readonly RouteRecordRaw[] = [
     path: "/add",
     name: ROUTE_NAMES.add,
     component: () => import("../pages/add.vue"),
+  },
+  {
+    path: "/category",
+    name: ROUTE_NAMES.category,
+    component: () => import("../pages/category.vue"),
   },
   {
     path: "/:pathMatch(.*)*",
