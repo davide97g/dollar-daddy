@@ -4,6 +4,14 @@
       <f7-link panel-open="left">
         <i class="i-mdi-menu w-6 h-6"></i>
       </f7-link>
+      <f7-link
+        class="pl-2"
+        @click="router.push({ name: ROUTE_NAMES.homepage })"
+      >
+        <i
+          class="i-mdi-home w-6 h-6 text-color-primary hover:text-color-primary-dark"
+        ></i>
+      </f7-link>
     </f7-nav-left>
     <f7-nav-title
       sliding
@@ -68,7 +76,10 @@ import {
   f7Block,
   f7Button,
 } from "framework7-vue";
+import { useRouter } from "vue-router";
+import { ROUTE_NAMES } from "../router/routes";
 
+const router = useRouter();
 const env = import.meta.env.VITE_ENV;
 // COLOR THEMES
 const colors: string[] = Object.keys(f7.colors).filter(
