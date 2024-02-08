@@ -11,7 +11,8 @@
       <f7-list-input
         label="Color"
         type="colorpicker"
-        v-model:value="newCategory.color"
+        :value="newCategory.color"
+        @colorpicker:change="(v) => (newCategory.color = v.hex)"
         clear-button
       >
       </f7-list-input>
@@ -24,10 +25,13 @@
       ></f7-list-item>
       <f7-list-input
         label="budget?"
-        type="select"
         placeholder="budget?"
-        disabled
         clear-button
+        :value="newCategory.budget?.weekly"
+        @update:value="(x) =>{
+          if(!newCategory.budget) newCategory.budget = {monthly:0,};
+          newCategory.budget!.monthly=x;
+        }"
       >
       </f7-list-input>
       <f7-list-input
@@ -49,7 +53,17 @@
   </f7Card>
   <f7BlockTitle>Categories</f7BlockTitle>
   <f7-block v-if="categories">
-    {{ JSON.stringify(categories.map((c) => c.title).join(", ")) }}
+    <f7-list strong-ios dividers-ios inset-ios>
+      <f7-list-input
+        v-for="category in categories"
+        label="Title"
+        type="text"
+        floating-label
+        clear-button
+        :value="category.title"
+        disabled
+      />
+    </f7-list>
   </f7-block>
 </template>
 
@@ -71,23 +85,17 @@ import { DD_Category } from "../models/categories";
 
 const userStore = useUserStore();
 const categories = ref<DD_Category[]>([]);
-if (userStore.user?.id) {
-  API.Database.Users.getUserCategories(userStore.user?.id).then(
-    (res) => (categories.value = res)
-  );
-}
 
-const generateRandomValue = (): string => {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  let result = "";
-  for (let i = 0; i < 10; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
+const getUserCategories = () => {
+  if (userStore.user?.id) {
+    API.Database.Users.Categories.getUserCategories(userStore.user?.id).then(
+      (res) => (categories.value = res)
+    );
   }
-  return result;
 };
 
 const newCategory = ref<DD_Category>({
-  id: generateRandomValue(),
+  id: crypto.randomUUID(),
   userId: userStore.user?.id || "",
   title: "",
   excludedFromStats: false,
@@ -103,9 +111,16 @@ const clear = () => {
 };
 
 const save = () => {
-  console.log("Da implementare");
-  console.log("andrei a salvare la categoria: ", newCategory.value);
+  if (userStore.user?.id)
+    API.Database.Users.Categories.createUserCategory(
+      userStore.user.id,
+      newCategory.value
+    )
+      .then(getUserCategories)
+      .catch((err) => console.error("failed creation category", err));
 };
+
+getUserCategories();
 </script>
 
 <style scoped>

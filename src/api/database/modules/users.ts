@@ -1,18 +1,9 @@
-import type { DD_Category } from "src/models/categories";
 import { DB } from "../../../config/firebase";
 import type { DD_User } from "../../../models/user";
 import { setLoading } from "../../../services/utils";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-} from "firebase/firestore";
-import { DD_Tag } from "src/models/tag";
-import { DD_Transaction } from "src/models/transaction";
-import { DD_Stats } from "src/models/stats";
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { UserCategories } from "./subcollections/user.categories";
+import { UserTransactions } from "./subcollections/user.transactions";
 
 const COLLECTION = "users";
 export const Users = {
@@ -22,41 +13,6 @@ export const Users = {
       setLoading(false)
     );
     return snap.exists() ? (snap.data() as DD_User) : null;
-  },
-  getUserCategories: async (id: string) => {
-    setLoading(true);
-    const snaps = await getDocs(
-      collection(DB, COLLECTION, id, "categories")
-    ).finally(() => setLoading(false));
-    return snaps.docs.map((snap) => snap.data() as DD_Category);
-  },
-  getUserTags: async (id: string) => {
-    setLoading(true);
-    const snaps = await getDocs(collection(DB, COLLECTION, id, "tags")).finally(
-      () => setLoading(false)
-    );
-    return snaps.docs.map((snap) => snap.data() as DD_Tag);
-  },
-  getUserTransactions: async (id: string) => {
-    setLoading(true);
-    const snaps = await getDocs(
-      collection(DB, COLLECTION, id, "transactions")
-    ).finally(() => setLoading(false));
-    return snaps.docs.map((snap) => snap.data() as DD_Transaction);
-  },
-  getUserRecurrencies: async (id: string) => {
-    setLoading(true);
-    const snaps = await getDocs(
-      collection(DB, COLLECTION, id, "recurrencies")
-    ).finally(() => setLoading(false));
-    return snaps.docs.map((snap) => snap.data() as DD_Transaction);
-  },
-  getUserStats: async (id: string) => {
-    setLoading(true);
-    const snaps = await getDocs(
-      collection(DB, COLLECTION, id, "stats")
-    ).finally(() => setLoading(false));
-    return snaps.docs.map((snap) => snap.data() as DD_Stats);
   },
   create: async (user: DD_User): Promise<DD_User | null> => {
     try {
@@ -89,4 +45,7 @@ export const Users = {
       setLoading(false)
     );
   },
+  // ******** SUBCOLLECTIONS ****
+  Categories: UserCategories,
+  Transactions: UserTransactions,
 };

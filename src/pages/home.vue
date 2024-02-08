@@ -35,7 +35,7 @@ const userStore = useUserStore();
 const categories = ref<DD_Category[]>([]);
 const router = useRouter();
 if (userStore.user?.id) {
-  API.Database.Users.getUserCategories(userStore.user?.id).then(
+  API.Database.Users.Categories.getUserCategories(userStore.user?.id).then(
     (res) => (categories.value = res)
   );
 }
