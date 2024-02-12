@@ -3,7 +3,8 @@
     <f7-list strong-ios dividers-ios inset-ios>
       <f7-list-input
         label="Amount"
-        type="text"
+        type="number"
+        pattern="[0-9]+"
         floating-label
         v-model:value="newTransaction.amount"
         clear-button
