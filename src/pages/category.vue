@@ -108,6 +108,7 @@ const clear = () => {
   newCategory.value.excludedFromStats = false;
   newCategory.value.color = "";
   newCategory.value.parentCategoryId = "";
+  newCategory.value.id = crypto.randomUUID();
 };
 
 const save = () => {
@@ -118,6 +119,7 @@ const save = () => {
     )
       .then(getUserCategories)
       .catch((err) => console.error("failed creation category", err));
+  clear();
 };
 
 getUserCategories();
