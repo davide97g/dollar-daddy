@@ -38,12 +38,13 @@
         label="Parentid"
         type="select"
         floating-label
-        clear-button
         options="categories"
         v-model:value="newCategory.parentCategoryId"
         @input:clear="newCategory.parentCategoryId = ''"
       >
-        <option key="maschio">daImplementare</option>
+        <optgroup v-for="category in categories">
+          <option v-bind:value="category.id">{{ category.title }}</option>
+        </optgroup>
       </f7-list-input>
     </f7-list>
     <f7-card-footer>

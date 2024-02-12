@@ -45,7 +45,9 @@
         v-model:value="newTransaction.categoryId"
         @input:clear="newTransaction.categoryId = ''"
       >
-        <option key="maschio">daImplementare</option>
+        <optgroup v-for="category in categories">
+          <option v-bind:value="category.id">{{ category.title }}</option>
+        </optgroup>
       </f7-list-input>
     </f7-list>
     <f7-card-footer>
@@ -77,25 +79,19 @@ import { DD_Transaction } from "../models/transaction";
 import { watch } from "vue";
 
 const userStore = useUserStore();
-const categories = ref<DD_Category[]>([]);
 const tempDate = ref<Date>(new Date());
-if (userStore.user?.id) {
-  API.Database.Users.Categories.getUserCategories(userStore.user?.id).then(
-    (res) => (categories.value = res)
-  );
-}
 
-const generateRandomValue = (): string => {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  let result = "";
-  for (let i = 0; i < 10; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
+const categories = ref<DD_Category[]>([]);
+const getUserCategories = () => {
+  if (userStore.user?.id) {
+    API.Database.Users.Categories.getUserCategories(userStore.user?.id).then(
+      (res) => (categories.value = res)
+    );
   }
-  return result;
 };
 
 const newTransaction = ref<DD_Transaction>({
-  id: generateRandomValue(),
+  id: crypto.randomUUID(),
 
   userId: userStore.user?.id || "",
   day: new Date().getDate(),
@@ -131,6 +127,8 @@ watch(tempDate, (newDate) => {
 const handleDateChange = (newDate: Date) => {
   tempDate.value = new Date(newDate);
 };
+
+getUserCategories();
 </script>
 
 <style scoped>
