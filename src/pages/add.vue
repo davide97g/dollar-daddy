@@ -3,11 +3,16 @@
     <f7-list strong-ios dividers-ios inset-ios>
       <f7-list-input
         label="Amount"
-        type="number"
-        pattern="[0-9]+"
+        pattern="(\d+(?:\d{3})*(?:\.\d{1,2})?)"
         floating-label
+        inputmode="number"
         v-model:value="newTransaction.amount"
         clear-button
+        :error-message="
+          newTransaction.amount < 0 ? 'Amount cannot be negative' : ''
+        "
+        error-message-force
+        required
       >
       </f7-list-input>
       <f7-list-input
@@ -16,6 +21,7 @@
         floating-label
         v-model:value="newTransaction.description"
         clear-button
+        validate
       >
       </f7-list-input>
       <f7-list-input
