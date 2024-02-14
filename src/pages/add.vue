@@ -58,9 +58,19 @@
       <f7-button @click="save()">Save</f7-button>
     </f7-card-footer>
   </f7Card>
-  <f7BlockTitle>Categories</f7BlockTitle>
   <f7-block v-if="categories">
+    <f7BlockTitle>Categories</f7BlockTitle>
     {{ JSON.stringify(categories.map((c) => c.title).join(", ")) }}
+  </f7-block>
+  <f7-block v-if="transactions">
+    <f7BlockTitle>Transactions</f7BlockTitle>
+    {{
+      JSON.stringify(
+        transactions
+          .map((c) => `${c.description} (${c.categoryId}): ${c.amount}`)
+          .join(", ")
+      )
+    }}
   </f7-block>
 </template>
 
@@ -79,17 +89,27 @@ import {
 import { useUserStore } from "../stores/user";
 import { DD_Category } from "../models/categories";
 import { DD_Transaction } from "../models/transaction";
-import { watch } from "vue";
 
 const userStore = useUserStore();
 const tempDate = ref<Date[]>([new Date()]);
 
 const categories = ref<DD_Category[]>([]);
+const transactions = ref<DD_Transaction[]>([]); // TODO: to be removed, just to check if it works
+
 const getUserCategories = () => {
   if (userStore.user?.id) {
     API.Database.Users.Categories.getUserCategories(userStore.user?.id).then(
       (res) => (categories.value = res)
     );
+  }
+};
+
+// TODO: to be removed, just to check if it works
+const getListTransactions = () => {
+  if (userStore.user?.id) {
+    API.Database.Users.Transactions.getUsertransactions(
+      userStore.user?.id
+    ).then((res) => (transactions.value = res));
   }
 };
 
@@ -111,26 +131,43 @@ const clear = () => {
   newTransaction.value.categoryId = "";
   newTransaction.value.amount = 0;
   newTransaction.value.description = "";
+  tempDate.value = [new Date()];
+};
+
+const validate = (): boolean => {
+  // TODO: implement validation
+  console.log("Validation is not implemented yet!");
+  if (true) {
+    newTransaction.value.timestamp = new Date(
+      tempDate.value[0].toString()
+    ).getTime();
+    newTransaction.value.day = new Date(tempDate.value[0].toString()).getDate();
+    newTransaction.value.month = new Date(
+      tempDate.value[0].toString()
+    ).getMonth();
+    newTransaction.value.year = new Date(
+      tempDate.value[0].toString()
+    ).getFullYear();
+  }
+  console.log("Transaction", newTransaction.value);
+
+  return true;
 };
 
 const save = () => {
-  console.log("Da implementare");
-  console.log("andrei a salvare la categoria: ", newTransaction.value);
+  if (validate() && userStore.user?.id)
+    API.Database.Users.Transactions.createUserTransaction(
+      userStore.user.id,
+      newTransaction.value
+    )
+      .then(getListTransactions) // TODO: to be removed, just to check if it works
+      .catch((err) => console.error("failed creation transaction", err));
+
+  clear();
+  newTransaction.value.id = crypto.randomUUID();
 };
 
-//add a watcher to the date
-watch(tempDate, (newDate) => {
-  console.log("newDate", newDate);
-  newTransaction.value.day = tempDate.value.getDate();
-  newTransaction.value.month = tempDate.value.getMonth();
-  newTransaction.value.year = tempDate.value.getFullYear();
-  newTransaction.value.timestamp = tempDate.value.getTime();
-});
-
-const handleDateChange = (newDate: Date) => {
-  tempDate.value = new Date(newDate);
-};
-
+getListTransactions(); // TODO:  to be removed, just to check if it works
 getUserCategories();
 </script>
 
