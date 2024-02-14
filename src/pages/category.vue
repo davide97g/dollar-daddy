@@ -60,7 +60,6 @@
         label="Title"
         type="text"
         floating-label
-        clear-button
         :value="category.title"
         disabled
       />
