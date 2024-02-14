@@ -26,9 +26,8 @@
       </f7-list-input>
       <f7-list-input
         type="datepicker"
-        @calendar:change="handleDateChange($event)"
-        readonly
-        :value="[new Date()]"
+        :value="tempDate"
+        @calendar:change="tempDate = $event"
         :calendar-params="{
           header: true,
           openIn: 'customModal',
@@ -45,8 +44,6 @@
       <f7-list-input
         label="Category"
         type="select"
-        floating-label
-        clear-button
         options="categories"
         v-model:value="newTransaction.categoryId"
         @input:clear="newTransaction.categoryId = ''"
@@ -85,7 +82,7 @@ import { DD_Transaction } from "../models/transaction";
 import { watch } from "vue";
 
 const userStore = useUserStore();
-const tempDate = ref<Date>(new Date());
+const tempDate = ref<Date[]>([new Date()]);
 
 const categories = ref<DD_Category[]>([]);
 const getUserCategories = () => {
