@@ -25,6 +25,7 @@
         v-for="(item, index) in transactions"
         :key="index"
         @click="handleCardClick(item.id)"
+        @swipeout:delete="deleteTransaction(item.id)"
         :style="{
           background: '#FDF2F2FF',
           borderRadius: '1rem',
@@ -97,7 +98,6 @@ const selectedTransactionId = ref<string>();
 
 onMounted(() => {
   getListTransactions();
-  console.log(transactions.value);
 });
 
 function generateRandomTransaction(): DD_Transaction {
@@ -142,6 +142,18 @@ const handleCardClick = (id: string) => {
 const goToAdd = () => {
   router.push({ name: ROUTE_NAMES.add });
 };
+
+function deleteTransaction(id: string) {
+  const toDelete = transactions.value.find((t) => t.id === id);
+  if (userStore.user?.id && toDelete != undefined) {
+    API.Database.Users.Transactions.deleteUserTransaction(
+      userStore.user?.id,
+      toDelete
+    ); //TODO: check if it is right
+    //TODO: update what has been stored before?
+    //TODO: update possible values of Total and Last 7 days etc
+  }
+}
 </script>
 
 <style lang="scss">
