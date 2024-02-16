@@ -83,17 +83,20 @@ import { DD_Transaction } from "../models/transaction";
 import { ref } from "vue";
 import { onMounted } from "vue";
 import TransactionDetail from "../components/TransactionDetail.vue";
+import { API } from "../api";
 
 import { useRouter } from "vue-router";
+import { useUserStore } from "../stores/user";
 import { ROUTE_NAMES } from "../router/routes";
 
+const userStore = useUserStore();
 const router = useRouter();
 
 const transactions = ref<DD_Transaction[]>([]);
 const selectedTransactionId = ref<string>();
 
 onMounted(() => {
-  transactions.value = generateRandomTransactions();
+  getListTransactions();
   console.log(transactions.value);
 });
 
@@ -115,6 +118,14 @@ function generateRandomTransaction(): DD_Transaction {
   };
   return randomTransaction;
 }
+
+const getListTransactions = () => {
+  if (userStore.user?.id) {
+    API.Database.Users.Transactions.getUsertransactions(
+      userStore.user?.id
+    ).then((res) => (transactions.value = res));
+  }
+};
 
 function generateRandomTransactions(): DD_Transaction[] {
   const transactions: DD_Transaction[] = [];
