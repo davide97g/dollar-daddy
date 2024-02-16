@@ -7,6 +7,6 @@ import Unocss from "unocss/vite";
 export default defineConfig({
   plugins: [vue(), Unocss()],
   build: {
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 1500,
   },
 });
