@@ -1,12 +1,15 @@
 <template>
   <f7-sheet
     v-model:opened="isOpen"
-    @sheet:close="() => emits('close')"
     style="height: auto"
     swipe-to-close
     swipe-to-step
     push
     backdrop
+    @sheet:close="() => emits('close')"
+    @sheet:stepopen="isSwipeOpen = true"
+    @sheet:stepclose="isSwipeOpen = false"
+    @sheet:closed="isSwipeOpen = false"
   >
     <f7-toolbar>
       <div slot="before-inner">
@@ -41,7 +44,7 @@
         </div>
       </div>
       <div class="padding-horizontal padding-bottom">
-        <div class="margin-top text-align-center">
+        <div v-if="!isSwipeOpen" class="margin-top text-align-center">
           Swipe up for more details
         </div>
       </div>
@@ -89,7 +92,9 @@ import {
 const props = defineProps<{ transaction?: DD_Transaction }>();
 const emits = defineEmits(["close"]);
 
-const isOpen = ref(false);
+const isSwipeOpen = ref<boolean>(false);
+
+const isOpen = ref<boolean>(false);
 watch(
   () => props.transaction,
   () => (isOpen.value = !!props.transaction)
