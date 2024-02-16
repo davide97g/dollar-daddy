@@ -149,6 +149,14 @@ const validate = (): boolean => {
       tempDate.value[0].toString()
     ).getFullYear();
   }
+  //added this to solve strange behavior of amount storing as string even if it is a number
+  try {
+    newTransaction.value.amount = parseFloat(
+      newTransaction.value.amount.toString()
+    );
+  } catch (e) {
+    console.error("Error while converting amount to number", e);
+  }
   console.log("Transaction", newTransaction.value);
 
   return true;
