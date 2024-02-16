@@ -8,13 +8,28 @@
           <f7-navbar title="Left Panel"></f7-navbar>
           <f7-block>Left panel content goes here</f7-block>
           <f7-list menu-list strong-ios outline-ios>
-            <f7-list-item link title="Overview" @click="() => goToOverview()">
+            <f7-list-item
+              link
+              title="Overview"
+              @click="() => goToOverview()"
+              panel-close="left"
+            >
               <i class="i-mdi-view-dashboard w-5 h-5 text-color-primary"> </i>
             </f7-list-item>
-            <f7-list-item link title="Add Expense" @click="() => goToAdd()">
+            <f7-list-item
+              link
+              title="Add Expense"
+              @click="() => goToAdd()"
+              panel-close="left"
+            >
               <i class="i-mdi-plus-thick w-5 h-5 text-color-primary"> </i>
             </f7-list-item>
-            <f7-list-item link title="Categories" @click="() => goToCategory()">
+            <f7-list-item
+              link
+              title="Categories"
+              @click="() => goToCategory()"
+              panel-close="left"
+            >
               <i class="i-mdi-view-list w-5 h-5 text-color-primary"> </i>
             </f7-list-item>
           </f7-list>
