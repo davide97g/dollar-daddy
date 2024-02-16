@@ -63,7 +63,7 @@ const device = getDevice();
 const f7params = {
   name: "Dollar Daddy", // App name
   theme: "auto", // Automatic theme detection
-  id: "com.example.app", // App bundle ID
+  id: "com.dollardaddy.app", // App bundle ID
   // App routes
   routes: [],
   // Input settings
