@@ -18,6 +18,9 @@
       <f7-list-input
         label="Description"
         type="text"
+        :error-message="descriptionError"
+        error-message-force
+        @input="descriptionError = ''"
         floating-label
         v-model:value="newTransaction.description"
         clear-button
@@ -42,11 +45,13 @@
       />
 
       <f7-list-input
+        v-model:value="newTransaction.categoryId"
         label="Category"
         type="select"
         options="categories"
-        v-model:value="newTransaction.categoryId"
-        @input:clear="newTransaction.categoryId = ''"
+        :error-message="categoryError"
+        error-message-force
+        @input="categoryError = ''"
       >
         <optgroup v-for="category in categories">
           <option v-bind:value="category.id">{{ category.title }}</option>
@@ -96,6 +101,9 @@ const tempDate = ref<Date[]>([new Date()]);
 const categories = ref<DD_Category[]>([]);
 const transactions = ref<DD_Transaction[]>([]); // TODO: to be removed, just to check if it works
 
+const categoryError = ref<string>("");
+const descriptionError = ref<string>("");
+
 const getUserCategories = () => {
   if (userStore.user?.id) {
     API.Database.Users.Categories.getUserCategories(userStore.user?.id).then(
@@ -137,7 +145,20 @@ const clear = () => {
 const validate = (): boolean => {
   // TODO: implement validation
   console.log("Validation is not implemented yet!");
-  if (true) {
+  let flag = true;
+  if (newTransaction.value.description.length < 3) {
+    descriptionError.value = "Description is required";
+    console.log("Description is not valid");
+    flag = false;
+  }
+  if (!newTransaction.value.categoryId) {
+    categoryError.value = "Category is required";
+    console.log("Category is not valid");
+    flag = false;
+  }
+  //TODO: add other validation (e.g. amount)
+
+  if (flag) {
     newTransaction.value.timestamp = new Date(
       tempDate.value[0].toString()
     ).getTime();
@@ -148,6 +169,9 @@ const validate = (): boolean => {
     newTransaction.value.year = new Date(
       tempDate.value[0].toString()
     ).getFullYear();
+  } else {
+    console.log("Transaction is not valid");
+    return false;
   }
   //added this to solve strange behavior of amount storing as string even if it is a number
   try {
@@ -171,8 +195,8 @@ const save = () => {
       .then(getListTransactions) // TODO: to be removed, just to check if it works
       .catch((err) => console.error("failed creation transaction", err));
 
-  clear();
-  newTransaction.value.id = crypto.randomUUID();
+  //clear(); //TODO: do this only if the transaction was saved
+  newTransaction.value.id = crypto.randomUUID(); //TODO: do this only if the transaction was saved
 };
 
 getListTransactions(); // TODO:  to be removed, just to check if it works
