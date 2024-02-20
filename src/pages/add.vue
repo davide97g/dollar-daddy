@@ -1,28 +1,35 @@
 <template>
   <f7Card title="New Expense" :content="userStore.user?.displayName">
-    <f7-list strong-ios dividers-ios inset-ios>
+    <f7-list
+      form
+      id="testForm"
+      @submit="onsubmit"
+      strong-ios
+      dividers-ios
+      inset-ios
+    >
       <f7-list-input
         label="Amount"
-        pattern="(\d+(?:\d{3})*(?:\.\d{1,2})?)"
         floating-label
-        inputmode="number"
-        v-model:value="newTransaction.amount"
+        autofocus
+        type="number"
+        step="0.01"
+        :value="tempAmount"
         clear-button
-        :error-message="
-          newTransaction.amount < 0 ? 'Amount cannot be negative' : ''
-        "
-        error-message-force
         required
+        @input="onInputAmount"
+        validate
       >
       </f7-list-input>
       <f7-list-input
         label="Description"
         type="text"
-        :error-message="descriptionError"
-        error-message-force
-        @input="descriptionError = ''"
+        pattern=".{3,}"
+        error-message="Insert at least 3 characters"
         floating-label
-        v-model:value="newTransaction.description"
+        required
+        :value="newTransaction.description"
+        @input="newTransaction.description = $event.target.value"
         clear-button
         validate
       >
@@ -49,20 +56,20 @@
         label="Category"
         type="select"
         options="categories"
-        :error-message="categoryError"
-        error-message-force
-        @input="categoryError = ''"
+        required
       >
         <optgroup v-for="category in categories">
-          <option v-bind:value="category.id">{{ category.title }}</option>
+          <option :value="category.id">{{ category.title }}</option>
         </optgroup>
       </f7-list-input>
+
+      <f7-card-footer>
+        <f7-button type="button" @click="clear">Clear</f7-button>
+        <f7-button type="submit">Save</f7-button>
+      </f7-card-footer>
     </f7-list>
-    <f7-card-footer>
-      <f7-button @click="clear()">Clear</f7-button>
-      <f7-button @click="save()">Save</f7-button>
-    </f7-card-footer>
   </f7Card>
+
   <f7-block v-if="categories">
     <f7BlockTitle>Categories</f7BlockTitle>
     {{ JSON.stringify(categories.map((c) => c.title).join(", ")) }}
@@ -90,19 +97,19 @@ import {
   f7Button,
   f7BlockTitle,
   f7Block,
+  f7,
 } from "framework7-vue";
 import { useUserStore } from "../stores/user";
 import { DD_Category } from "../models/categories";
 import { DD_Transaction } from "../models/transaction";
 
 const userStore = useUserStore();
+
 const tempDate = ref<Date[]>([new Date()]);
+const tempAmount = ref<string>("");
 
 const categories = ref<DD_Category[]>([]);
 const transactions = ref<DD_Transaction[]>([]); // TODO: to be removed, just to check if it works
-
-const categoryError = ref<string>("");
-const descriptionError = ref<string>("");
 
 const getUserCategories = () => {
   if (userStore.user?.id) {
@@ -137,28 +144,28 @@ const newTransaction = ref<DD_Transaction>({
 
 const clear = () => {
   newTransaction.value.categoryId = "";
-  newTransaction.value.amount = 0;
   newTransaction.value.description = "";
   tempDate.value = [new Date()];
+  tempAmount.value = "";
 };
 
-const validate = (): boolean => {
-  // TODO: implement validation
-  console.log("Validation is not implemented yet!");
-  let flag = true;
-  if (newTransaction.value.description.length < 3) {
-    descriptionError.value = "Description is required";
-    console.log("Description is not valid");
-    flag = false;
-  }
-  if (!newTransaction.value.categoryId) {
-    categoryError.value = "Category is required";
-    console.log("Category is not valid");
-    flag = false;
-  }
-  //TODO: add other validation (e.g. amount)
+const saveTransaction = () => {
+  if (userStore.user?.id)
+    API.Database.Users.Transactions.createUserTransaction(
+      userStore.user.id,
+      newTransaction.value
+    )
+      .then(getListTransactions) // TODO: to be removed, just to check if it works
+      .catch((err) => console.error("failed creation transaction", err));
 
-  if (flag) {
+  clear();
+  newTransaction.value.id = crypto.randomUUID();
+};
+
+const onsubmit = (event: Event) => {
+  const isValid = f7.input.validateInputs("#testForm");
+  if (isValid) {
+    // convert tempDate to the specific format for date in the transaction
     newTransaction.value.timestamp = new Date(
       tempDate.value[0].toString()
     ).getTime();
@@ -169,34 +176,38 @@ const validate = (): boolean => {
     newTransaction.value.year = new Date(
       tempDate.value[0].toString()
     ).getFullYear();
-  } else {
-    console.log("Transaction is not valid");
-    return false;
-  }
-  //added this to solve strange behavior of amount storing as string even if it is a number
-  try {
-    newTransaction.value.amount = parseFloat(
-      newTransaction.value.amount.toString()
-    );
-  } catch (e) {
-    console.error("Error while converting amount to number", e);
-  }
-  console.log("Transaction", newTransaction.value);
 
-  return true;
+    //check if tempAmount has -. If true, tempAmount = 0, then convert tempAmount to number
+    if (tempAmount.value.includes("-")) {
+      console.log("Amount is negative -> set to 0");
+      tempAmount.value = "0";
+    }
+    try {
+      newTransaction.value.amount = parseFloat(tempAmount.value);
+    } catch (e) {
+      console.error("Error while converting amount to number", e);
+    }
+    console.log("Transaction", newTransaction.value);
+
+    // then save the transaction
+    saveTransaction();
+  }
+  event.preventDefault();
+  // save();
 };
 
-const save = () => {
-  if (validate() && userStore.user?.id)
-    API.Database.Users.Transactions.createUserTransaction(
-      userStore.user.id,
-      newTransaction.value
-    )
-      .then(getListTransactions) // TODO: to be removed, just to check if it works
-      .catch((err) => console.error("failed creation transaction", err));
-
-  //clear(); //TODO: do this only if the transaction was saved
-  newTransaction.value.id = crypto.randomUUID(); //TODO: do this only if the transaction was saved
+//the following is used to modify the input field for amount to accept only 2 decimal digits
+const onInputAmount = (event: any) => {
+  tempAmount.value = event.target?.value;
+  if (tempAmount.value.includes(".")) {
+    //if number has a decimal part
+    let decimal = tempAmount.value.split(".")[1];
+    if (decimal.length > 2) {
+      //not more than 2 decimal digits
+      tempAmount.value = tempAmount.value.slice(0, -decimal.length + 2);
+      event.target.value = tempAmount.value; //update value shown in the input field
+    }
+  }
 };
 
 getListTransactions(); // TODO:  to be removed, just to check if it works
